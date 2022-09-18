@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView timeView;
     private ImageButton buttonStartStop;
     private ImageButton buttonReset;
+    private ScrollView scrollView;
     private LinearLayout layoutLaps;
 
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         timeView = findViewById(R.id.text_time);
         layoutLaps = findViewById(R.id.layout_laps);
+        scrollView = findViewById(R.id.scrollview_laps);
         // loading state if recreated
         if (savedInstanceState != null) {
             deciseconds = savedInstanceState.getInt("deciseconds");
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             lapView.setText(Html.fromHtml(lap));
             lapView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
             layoutLaps.addView(lapView);
+            scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
         }
     }
 
