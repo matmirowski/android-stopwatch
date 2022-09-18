@@ -5,41 +5,39 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Locale;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private int deciseconds = 0;
     private boolean running = false;
     private final Handler handler = new Handler();
     private Runnable timerRunnable;
+    private TextView timeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        timeView = findViewById(R.id.text_time);
         // loading state if recreated
         if (savedInstanceState != null) {
             deciseconds = savedInstanceState.getInt("deciseconds");
             running = savedInstanceState.getBoolean("running");
         }
         // adding onClickListeners
-        ImageButton buttonStart = findViewById(R.id.button_start);
-        ImageButton buttonStop = findViewById(R.id.button_stop);
+        ImageButton buttonStartStop = findViewById(R.id.button_startstop);
         ImageButton buttonReset = findViewById(R.id.button_reset);
-        buttonStart.setOnClickListener(e -> onClickStart());
-        buttonStop.setOnClickListener(e -> onClickStop());
+        ImageButton buttonLap = findViewById(R.id.button_lap);
+        buttonStartStop.setOnClickListener(e -> onClickStartStop());
         buttonReset.setOnClickListener(e -> onClickReset());
+        buttonLap.setOnClickListener(e -> onClickLap());
         // configuring timer runnable
         timerRunnable = new Runnable() {
             @Override
             public void run() {
-                TextView timeView = findViewById(R.id.text_time);
                 if (running) {
                     deciseconds++;
                     handler.postDelayed(this, 100);
@@ -64,15 +62,16 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private void onClickStart() {
+    private void onClickStartStop() {
+        ImageButton buttonStartStop = findViewById(R.id.button_startstop);
         if (!running) {
+            buttonStartStop.setImageResource(R.drawable.pause);
             running = true;
             handler.postDelayed(timerRunnable, 100);
+        } else { // if running
+            buttonStartStop.setImageResource(R.drawable.start);
+            running = false;
         }
-    }
-
-    private void onClickStop() {
-        running = false;
     }
 
     private void onClickReset() {
@@ -81,4 +80,7 @@ public class MainActivity extends AppCompatActivity {
         handler.post(timerRunnable);
     }
 
+    private void onClickLap() {
+
+    }
 }

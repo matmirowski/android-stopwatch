@@ -36,23 +36,27 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/button_start"
+            android:id="@+id/button_lap"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="8dp"
             android:background="@null"
-            android:src="@drawable/start"
-            />
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/start" />
 
         <ImageButton
-            android:id="@+id/button_stop"
+            android:id="@+id/button_startstop"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="8dp"
             android:background="@null"
-            android:src="@drawable/pauza" />
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/start" />
+
         <ImageButton
             android:id="@+id/button_reset"
             android:layout_width="100dp"
@@ -63,15 +67,6 @@
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:src="@drawable/ep" />
-        <ImageButton
-            android:id="@+id/button_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginHorizontal="8dp"
-            android:background="@null"
-            android:src="@drawable/start" />
-
     </LinearLayout>
 
     <ScrollView
