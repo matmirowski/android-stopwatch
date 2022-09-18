@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     + "</font";
             String formatedLapCounter = String.format(Locale.getDefault(), "%02d",
                     lapCounter);
-            String lap = formatedLapCounter + " " + formatedDifference + " " + formatedCurrentTime;
+            String lap = formatedLapCounter + formatedDifference + formatedCurrentTime;
             lapView.setText(Html.fromHtml(lap));
             lapView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
             layoutLaps.addView(lapView);
@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String formatToTime(int decisecs) {
-        int decis = (deciseconds % 10);
-        int seconds = (deciseconds % 600) / 10;
-        int minutes = (deciseconds % 36000) / 600;
-        int hours = (deciseconds / 36000);
+        int decis = (decisecs % 10);
+        int seconds = (decisecs % 600) / 10;
+        int minutes = (decisecs % 36000) / 600;
+        int hours = (decisecs / 36000);
         return String.format(Locale.getDefault(), "%d:%02d:%02d.%d",
                 hours, minutes, seconds, decis);
     }
