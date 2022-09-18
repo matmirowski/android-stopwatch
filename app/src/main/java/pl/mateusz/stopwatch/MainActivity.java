@@ -5,17 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private int deciseconds = 0;
+    private int lapCounter = 0;
+    private int previousLapTime = 0;
     private boolean running = false;
     private final Handler handler = new Handler();
     private Runnable timerRunnable;
     private TextView timeView;
+    private ImageButton buttonStartStop;
+    private ImageButton buttonReset;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +36,10 @@ public class MainActivity extends AppCompatActivity {
             running = savedInstanceState.getBoolean("running");
         }
         // adding onClickListeners
-        ImageButton buttonStartStop = findViewById(R.id.button_startstop);
-        ImageButton buttonReset = findViewById(R.id.button_reset);
-        ImageButton buttonLap = findViewById(R.id.button_lap);
+        buttonStartStop = findViewById(R.id.button_start_or_stop);
+        buttonReset = findViewById(R.id.button_reset_or_lap);
         buttonStartStop.setOnClickListener(e -> onClickStartStop());
         buttonReset.setOnClickListener(e -> onClickReset());
-        buttonLap.setOnClickListener(e -> onClickLap());
         // configuring timer runnable
         timerRunnable = new Runnable() {
             @Override
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 int seconds = (deciseconds % 600) / 10;
                 int minutes = (deciseconds % 36000) / 600;
                 int hours = (deciseconds / 36000);
-                String newTime = String.format(Locale.getDefault(), "%d:%02d:%02d:%d",
+                String newTime = String.format(Locale.getDefault(), "%d:%02d:%02d.%d",
                         hours, minutes, seconds, decis);
                 timeView.setText(newTime);
             }
@@ -63,24 +69,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickStartStop() {
-        ImageButton buttonStartStop = findViewById(R.id.button_startstop);
         if (!running) {
-            buttonStartStop.setImageResource(R.drawable.pause);
+            if (deciseconds == 0) // start
+                buttonReset.setVisibility(View.VISIBLE);
             running = true;
             handler.postDelayed(timerRunnable, 100);
-        } else { // if running
-            buttonStartStop.setImageResource(R.drawable.start);
+            buttonReset.setImageResource(R.drawable.lap);
+            buttonStartStop.setImageResource(R.drawable.pause);
+        } else { // pause function
             running = false;
+            buttonStartStop.setImageResource(R.drawable.start);
+            buttonReset.setImageResource(R.drawable.reset);
         }
     }
 
     private void onClickReset() {
-        running = false;
-        deciseconds = 0;
-        handler.post(timerRunnable);
+        if (!running) { // reset function
+            deciseconds = 0;
+            handler.post(timerRunnable);
+            buttonReset.setImageResource(R.drawable.lap);
+            buttonReset.setVisibility(View.GONE);
+        } else { // lap function
+            LinearLayout layoutLaps = findViewById(R.id.layout_laps);
+            TextView lapView = new TextView(this);
+            lapView.setGravity(Gravity.CENTER_HORIZONTAL);
+            int difference = deciseconds - previousLapTime;
+            previousLapTime = deciseconds;
+        }
     }
 
-    private void onClickLap() {
-
-    }
 }

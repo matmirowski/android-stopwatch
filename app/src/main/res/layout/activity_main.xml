@@ -36,55 +36,52 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/button_lap"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/button_reset_or_lap"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginHorizontal="24dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            android:src="@drawable/reset" />
+
+        <ImageButton
+            android:id="@+id/button_start_or_stop"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="24dp"
             android:background="@null"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:src="@drawable/start" />
-
-        <ImageButton
-            android:id="@+id/button_startstop"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginHorizontal="8dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:src="@drawable/start" />
-
-        <ImageButton
-            android:id="@+id/button_reset"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginHorizontal="8dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ep" />
     </LinearLayout>
 
     <ScrollView
-        android:layout_width="342dp"
+        android:layout_width="match_parent"
         android:layout_height="448dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_time"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/text_time">
 
         <LinearLayout
+            android:id="@+id/layout_laps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="02    + 00:00.3  00:09.1" />
+        </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
