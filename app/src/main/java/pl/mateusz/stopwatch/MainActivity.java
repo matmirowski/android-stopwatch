@@ -2,6 +2,7 @@ package pl.mateusz.stopwatch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -93,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
             previousLapTime = 0;
         } else { // lap function
             TextView lapView = new TextView(this);
-            //lapView.setGravity(Gravity.CENTER_HORIZONTAL);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.CENTER_HORIZONTAL;
             params.setMargins(10,10,10,10);
@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
             lapCounter++;
             String formatedDifference = "&#160&#160&#160&#160&#160<font color=#FF0000>" + "+"
                     + formatToTime(difference)
-                    + "&#160&#160&#160&#160&#160</font";
+                    + "&#160&#160&#160&#160&#160</font>";
             String formatedCurrentTime = "<font color=#000000>" + formatToTime(deciseconds)
-                    + "</font";
+                    + "</font>";
             String formatedLapCounter = String.format(Locale.getDefault(), "%02d",
                     lapCounter);
             String lap = formatedLapCounter + formatedDifference + formatedCurrentTime;
