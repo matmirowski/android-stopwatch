@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private int previousLapTime = 0;
     private boolean running = false;
     private final Handler handler = new Handler();
-    private ArrayList<String> lapList = new ArrayList<>();
+    private ArrayList<String> htmlLapList = new ArrayList<>();
     private Runnable timerRunnable;
     private TextView timeView;
     private ImageButton buttonStartStop;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putBoolean("running", running);
         savedInstanceState.putInt("lapCounter", lapCounter);
         savedInstanceState.putInt("previousLapTime", previousLapTime);
-        savedInstanceState.putStringArrayList("lapList", lapList);
+        savedInstanceState.putStringArrayList("lapList", htmlLapList);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         layoutLaps.removeAllViews();
         lapCounter = 0;
         previousLapTime = 0;
-        lapList.clear();
+        htmlLapList.clear();
     }
 
     private void addLap() {
@@ -115,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
                 + "</font>";
         String formatedLapCounter = String.format(Locale.getDefault(), "%02d",
                 lapCounter);
-        String lap = formatedLapCounter + formatedDifference + formatedCurrentTime;
-        lapList.add(lap);
-        this.createLapTextView(lap);
+        String htmlLap = formatedLapCounter + formatedDifference + formatedCurrentTime;
+        htmlLapList.add(htmlLap);
+        this.createLapTextView(htmlLap);
         scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 
@@ -130,13 +130,15 @@ public class MainActivity extends AppCompatActivity {
                 hours, minutes, seconds, decis);
     }
 
-    private void createLapTextView(String text) {
+    private void createLapTextView(String htmlText) {
         TextView lapView = new TextView(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout
+                .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER_HORIZONTAL;
         params.setMargins(10,10,10,10);
         lapView.setLayoutParams(params);
-        lapView.setText(Html.fromHtml(text));
+        lapView.setText(Html.fromHtml(htmlText));
         lapView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
         layoutLaps.addView(lapView);
     }
@@ -146,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
         running = savedInstanceState.getBoolean("running");
         lapCounter = savedInstanceState.getInt("lapCounter");
         previousLapTime = savedInstanceState.getInt("previousLapTime");
-        lapList = savedInstanceState.getStringArrayList("lapList");
-        for (String lap : lapList) {
+        htmlLapList = savedInstanceState.getStringArrayList("lapList");
+        for (String lap : htmlLapList) {
             this.createLapTextView(lap);
         }
         scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
