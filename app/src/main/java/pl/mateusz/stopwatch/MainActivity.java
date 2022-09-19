@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         layoutLaps.removeAllViews();
         lapCounter = 0;
         previousLapTime = 0;
+        lapList.clear();
     }
 
     private void addLap() {
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         for (String lap : lapList) {
             this.createLapTextView(lap);
         }
+        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
         if (running) {
             buttonStartStop.setImageResource(R.drawable.pause);
             buttonResetLap.setVisibility(View.VISIBLE);
