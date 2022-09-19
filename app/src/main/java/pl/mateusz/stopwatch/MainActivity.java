@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private LinearLayout layoutLaps;
 
+    //TODO change button icons to final ones
+    //TODO button click animations
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

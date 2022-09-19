@@ -37,8 +37,8 @@
 
         <ImageButton
             android:id="@+id/button_reset_or_lap"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="24dp"
             android:background="@null"
@@ -49,8 +49,8 @@
 
         <ImageButton
             android:id="@+id/button_start_or_stop"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="24dp"
             android:background="@null"
