@@ -2,6 +2,8 @@ package pl.mateusz.stopwatch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -32,16 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO change button icons to final ones
     //TODO button click animations
+    //TODO maybe remove top status bar?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        timeView = findViewById(R.id.text_time);
-        layoutLaps = findViewById(R.id.layout_laps);
-        scrollView = findViewById(R.id.scrollview_laps);
-        buttonStartStop = findViewById(R.id.button_start_or_stop);
-        buttonResetLap = findViewById(R.id.button_reset_or_lap);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
+        assignViewsToVariables();
         // loading state if recreated
         if (savedInstanceState != null)
                 this.loadSavedInstanceState(savedInstanceState);
@@ -99,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
     private void reset() {
         deciseconds = 0;
         handler.post(timerRunnable);
-        buttonResetLap.setImageResource(R.drawable.lap);
         buttonResetLap.setVisibility(View.GONE);
         layoutLaps.removeAllViews();
+        layoutLaps.setVisibility(View.INVISIBLE);
         lapCounter = 0;
         previousLapTime = 0;
         htmlLapList.clear();
@@ -111,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
         int difference = deciseconds - previousLapTime;
         previousLapTime = deciseconds;
         lapCounter++;
-        String formatedDifference = "&#160&#160&#160&#160&#160<font color=#FF0000>" + "+"
+        String formatedDifference = "&#160&#160&#160&#160&#160&#160&#160&#160<font color=#FF0000>" + "+"
                 + formatToTime(difference)
-                + "&#160&#160&#160&#160&#160</font>";
-        String formatedCurrentTime = "<font color=#000000>" + formatToTime(deciseconds)
+                + "&#160&#160&#160&#160&#160&#160&#160&#160</font>";
+        String formatedCurrentTime = "<font color=#FFFFFF>" + formatToTime(deciseconds)
                 + "</font>";
         String formatedLapCounter = String.format(Locale.getDefault(), "%02d",
                 lapCounter);
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         lapView.setLayoutParams(params);
         lapView.setText(Html.fromHtml(htmlText));
         lapView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+        layoutLaps.setVisibility(View.VISIBLE);
         layoutLaps.addView(lapView);
     }
 
@@ -164,6 +167,14 @@ public class MainActivity extends AppCompatActivity {
             buttonResetLap.setVisibility(View.VISIBLE);
             buttonResetLap.setImageResource(R.drawable.reset);
         }
+    }
+
+    private void assignViewsToVariables() {
+        timeView = findViewById(R.id.text_time);
+        layoutLaps = findViewById(R.id.layout_laps);
+        scrollView = findViewById(R.id.scrollview_laps);
+        buttonStartStop = findViewById(R.id.button_start_or_stop);
+        buttonResetLap = findViewById(R.id.button_reset_or_lap);
     }
 
 }
