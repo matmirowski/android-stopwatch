@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         if (!running) {
             if (deciseconds == 0) // start
                 animator.playStartAnimation();
+            else buttonStartStop.setImageResource(R.drawable.pause);
+            buttonResetLap.setImageResource(R.drawable.lap);
             running = true;
             handler.postDelayed(timerRunnable, 100);
         } else { // pause
