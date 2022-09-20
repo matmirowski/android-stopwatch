@@ -10,6 +10,8 @@ import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -31,10 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton buttonResetLap;
     private ScrollView scrollView;
     private LinearLayout layoutLaps;
-
-    //TODO change button icons to final ones
-    //TODO button click animations
-    //TODO maybe remove top status bar?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +75,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClickStartStop() {
         if (!running) {
-            if (deciseconds == 0) // start
-                buttonResetLap.setVisibility(View.VISIBLE);
+            if (deciseconds == 0) { // start
+                Animation animation6 = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_center_out);
+                buttonStartStop.startAnimation(animation6);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonResetLap.setImageResource(R.drawable.lap);
+                        buttonStartStop.setImageResource(R.drawable.pause);
+                        buttonResetLap.setVisibility(View.VISIBLE);
+                        Animation animation = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_left_in);
+                        buttonResetLap.startAnimation(animation);
+                        Animation animation2 = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_right_in);
+                        buttonStartStop.startAnimation(animation2);
+                    }
+                }, 300);
+            }
             running = true;
             handler.postDelayed(timerRunnable, 100);
-            buttonResetLap.setImageResource(R.drawable.lap);
-            buttonStartStop.setImageResource(R.drawable.pause);
         } else { // pause
             running = false;
             buttonStartStop.setImageResource(R.drawable.start);
@@ -107,6 +117,17 @@ public class MainActivity extends AppCompatActivity {
         lapCounter = 0;
         previousLapTime = 0;
         htmlLapList.clear();
+        Animation animation3 = AnimationUtils.loadAnimation(this, R.anim.slide_right_out);
+        buttonStartStop.startAnimation(animation3);
+        Animation animation4 = AnimationUtils.loadAnimation(this, R.anim.slide_left_out);
+        buttonResetLap.startAnimation(animation4);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Animation animation5 = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_center_in);
+                buttonStartStop.startAnimation(animation5);
+            }
+        }, 300);
     }
 
     private void addLap() {
