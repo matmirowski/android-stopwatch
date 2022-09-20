@@ -6,12 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -33,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton buttonResetLap;
     private ScrollView scrollView;
     private LinearLayout layoutLaps;
+    private Animator animator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +44,10 @@ public class MainActivity extends AppCompatActivity {
         // adding onClickListeners
         buttonStartStop.setOnClickListener(e -> onClickStartStop());
         buttonResetLap.setOnClickListener(e -> onClickResetLap());
+        // creating animator
+        animator = new Animator(buttonStartStop, buttonResetLap, getBaseContext());
         // configuring timer runnable
-        timerRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (running) {
-                    deciseconds++;
-                    handler.postDelayed(this, 100);
-                }
-                timeView.setText(formatToTime(deciseconds));
-            }
-        };
+        assignTimerRunnable();
         // executing timer runnable to display initial time
         handler.post(timerRunnable);
     }
@@ -75,22 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClickStartStop() {
         if (!running) {
-            if (deciseconds == 0) { // start
-                Animation animation6 = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_center_out);
-                buttonStartStop.startAnimation(animation6);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonResetLap.setImageResource(R.drawable.lap);
-                        buttonStartStop.setImageResource(R.drawable.pause);
-                        buttonResetLap.setVisibility(View.VISIBLE);
-                        Animation animation = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_left_in);
-                        buttonResetLap.startAnimation(animation);
-                        Animation animation2 = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_right_in);
-                        buttonStartStop.startAnimation(animation2);
-                    }
-                }, 300);
-            }
+            if (deciseconds == 0) // start
+                animator.playStartAnimation();
             running = true;
             handler.postDelayed(timerRunnable, 100);
         } else { // pause
@@ -117,17 +92,7 @@ public class MainActivity extends AppCompatActivity {
         lapCounter = 0;
         previousLapTime = 0;
         htmlLapList.clear();
-        Animation animation3 = AnimationUtils.loadAnimation(this, R.anim.slide_right_out);
-        buttonStartStop.startAnimation(animation3);
-        Animation animation4 = AnimationUtils.loadAnimation(this, R.anim.slide_left_out);
-        buttonResetLap.startAnimation(animation4);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation animation5 = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_center_in);
-                buttonStartStop.startAnimation(animation5);
-            }
-        }, 300);
+        animator.playResetAnimation();
     }
 
     private void addLap() {
@@ -143,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
                 lapCounter);
         String htmlLap = formatedLapCounter + formatedDifference + formatedCurrentTime;
         htmlLapList.add(htmlLap);
-        this.createLapTextView(htmlLap);
+        LapTextView lapView = new LapTextView(this, htmlLap);
+        layoutLaps.setVisibility(View.VISIBLE);
+        layoutLaps.addView(lapView);
         scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 
@@ -156,20 +123,6 @@ public class MainActivity extends AppCompatActivity {
                 hours, minutes, seconds, decis);
     }
 
-    private void createLapTextView(String htmlText) {
-        TextView lapView = new TextView(this);
-        LinearLayout.LayoutParams params = new LinearLayout
-                .LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER_HORIZONTAL;
-        params.setMargins(10,10,10,10);
-        lapView.setLayoutParams(params);
-        lapView.setText(Html.fromHtml(htmlText));
-        lapView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-        layoutLaps.setVisibility(View.VISIBLE);
-        layoutLaps.addView(lapView);
-    }
-
     private void loadSavedInstanceState(Bundle savedInstanceState) {
         deciseconds = savedInstanceState.getInt("deciseconds");
         running = savedInstanceState.getBoolean("running");
@@ -177,7 +130,9 @@ public class MainActivity extends AppCompatActivity {
         previousLapTime = savedInstanceState.getInt("previousLapTime");
         htmlLapList = savedInstanceState.getStringArrayList("lapList");
         for (String lap : htmlLapList) {
-            this.createLapTextView(lap);
+            LapTextView lapView = new LapTextView(this, lap);
+            layoutLaps.setVisibility(View.VISIBLE);
+            layoutLaps.addView(lapView);
         }
         scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
         if (running) {
@@ -196,6 +151,19 @@ public class MainActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.scrollview_laps);
         buttonStartStop = findViewById(R.id.button_start_or_stop);
         buttonResetLap = findViewById(R.id.button_reset_or_lap);
+    }
+
+    private void assignTimerRunnable() {
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (running) {
+                    deciseconds++;
+                    handler.postDelayed(this, 100);
+                }
+                timeView.setText(formatToTime(deciseconds));
+            }
+        };
     }
 
 }
